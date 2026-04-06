@@ -10,34 +10,79 @@ struct AadhaarVerificationScreen: View {
     
     var body: some View {
         ZStack {
-            if isLoading {
-                VStack {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: Color(hex: "#D4B547")))
-                        .scaleEffect(1.5)
-                    Text("Loading your pass...")
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
-                        .padding(.top, 16)
-                }
-            } else {
-                switch viewModel.currentStep {
-                case .buttonScreen:
-                    ButtonScreenContent(viewModel: viewModel, dismiss: dismiss)
-                case .initialPopup:
-                    InitialPopupContent(
-                        onAgree: {
-                            Task {
-                                await viewModel.onContinueFromPopup()
+    
+    // MAIN CONTENT ALWAYS RENDERED
+    switch viewModel.currentStep {
+    case .buttonScreen:
+        ButtonScreenContent(viewModel: viewModel, dismiss: dismiss)
+    case .initialPopup:
+        InitialPopupContent(
+            onAgree: {
+                Task { await viewModel.onContinueFromPopup() }
+            },
+            onCancel: { viewModel.navigateToButtonScreen() }
+        )
+    case .uploadAadhaar:
+        AadhaarUploadContentScreen(viewModel: viewModel, showCamera: $showCamera, cameraForSelfie: $cameraForSelfie)
+    case .uploadSelfie:
+        SelfieUploadContentScreen(viewModel: viewModel, showCamera: $showCamera, cameraForSelfie: $cameraForSelfie)
+    }
+
+    // ✅ FULL SCREEN LOADER OVERLAY
+    if isLoading {
+        Color.black.opacity(0.4)
+            .ignoresSafeArea()
+        
+        VStack(spacing: 16) {
+            ProgressView()
+                .progressViewStyle(
+                    CircularProgressViewStyle(tint: Color(hex: "#D4B547"))
+                )
+                .scaleEffect(1.5)
+            
+            Text("Loading your pass...")
+                .font(.system(size: 14))
+                .foregroundColor(.white)
+        }
+    }
+}
+        .overlay {
+            if showInfoDialog {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture { showInfoDialog = false }
+                    .overlay {
+                        VStack(alignment: .leading, spacing: 16) {
+                            Text("Why we ask for Government ID")
+                                .font(.headline)
+
+                            VStack(alignment: .leading, spacing: 12) {
+                                Text("To enable Face Entry at events, we need to verify that the face you upload belongs to a real person. Your government ID helps us confirm your identity once, so your face can be used for fast and secure entry at events.")
+
+                                Text("• Your ID is used only for verification.")
+                                Text("• It is securely encrypted and never shared with event organizers or third parties.")
+                                Text("• This step is only required for Smart Face Entry events.")
+                                Text("• Prefer not to upload an ID? No problem. You can skip this step and continue using WHOOPPE as a regular ticketing app. You'll simply receive a QR ticket for entry instead of facial entry.")
                             }
-                        },
-                        onCancel: { viewModel.navigateToButtonScreen() }
-                    )
-                case .uploadAadhaar:
-                    AadhaarUploadContentScreen(viewModel: viewModel, showCamera: $showCamera, cameraForSelfie: $cameraForSelfie)
-                case .uploadSelfie:
-                    SelfieUploadContentScreen(viewModel: viewModel, showCamera: $showCamera, cameraForSelfie: $cameraForSelfie)
-                }
+                            .font(.body)
+
+                            HStack {
+                                Button("OK, Got it") {
+                                    showInfoDialog = false
+                                }
+                                .buttonStyle(.borderedProminent)
+                            }
+                            .padding(.top, 8)
+                        }
+                        .padding(20)
+                        .padding(.bottom, 20)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Color(.systemBackground))
+                                .shadow(radius: 10)
+                        )
+                        .padding(24)
+                    }
             }
         }
         .task {
@@ -53,12 +98,6 @@ struct AadhaarVerificationScreen: View {
                 }
                 showCamera = false
             }
-        }
-        .alert("Why we ask for Government ID", isPresented: $showInfoDialog) {
-            Button("OK, Got it") { showInfoDialog = false }
-            Button("Cancel", role: .cancel) { dismiss() }
-        } message: {
-            Text("To enable Face Entry at events, we need to verify that the face you upload belongs to a real person.\n\nYour government ID helps us confirm your identity once, so your face can be used for fast and secure entry at events.")
         }
         .onChange(of: viewModel.verificationSuccess) { success in
             if success {
@@ -77,26 +116,7 @@ struct ButtonScreenContent: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Button(action: { dismiss() }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18))
-                        .foregroundColor(.black)
-                }
-                Spacer()
-                Text("Whooppe Authentication")
-                    .font(.custom("Spectral", size: 18))
-                    .foregroundColor(.black)
-                Spacer()
-                Color.clear.frame(width: 24)
-            }
-            .frame(height: 56)
-            .padding(.horizontal, 24)
-            .background(Color.white)
-            
-            Divider()
-                .padding(.horizontal, 0)
-            
+        
             ScrollView {
                 VStack(spacing: 24) {
                     PassCardView(viewModel: viewModel)
@@ -121,6 +141,21 @@ struct ButtonScreenContent: View {
         }
         .background(Color.white)
         .ignoresSafeArea(edges: .bottom)
+        .navigationTitle("Whooppe Authentication")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color(hex: "#D4B547"), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .toolbar {
+                // Remove the default back button
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                    }
+                }
+            }
     }
 }
 

@@ -14,6 +14,7 @@ struct HomeScreen: View {
     @State private var selectedCommunity: Community? = nil
     @State private var navigateToCommunityDetail = false
     @State private var navigateToIPL = false
+    @State private var navigateToNotifications = false
     
     var currentRoute: String {
         switch selectedTab {
@@ -54,25 +55,27 @@ struct HomeScreen: View {
                 if selectedTab == 0 {
                     VStack(spacing: 8) {
                         HStack {
+                        VStack (alignment: .leading) {
+
                             Text("Whooppe")
                                 .font(.custom("Spectral", size: 22))
                                 .foregroundColor(Color(hex: "#FF6B35"))
+                                
+                             Text("Welcome back, \(viewModel.userName)!")
+                                .font(.custom("Spectral", size: 16))
+                                .foregroundColor(Color(hex: "#000000"))    
                             
+                        }
                             Spacer()
                             
                             Button(action: {
-                                selectedTab = 4  // Navigate to Notifications
+                                navigateToNotifications = true
                             }) {
                                 Image(systemName: "bell.fill")
                                     .font(.system(size: 18))
                                     .foregroundColor(.black)
                             }
                             
-                            Button(action: {}) {
-                                Image(systemName: "gearshape.fill")
-                                    .font(.system(size: 18))
-                                    .foregroundColor(.black)
-                            }
                         }
                         .padding(.horizontal, 24)
                         .frame(height: 56)
@@ -85,8 +88,7 @@ struct HomeScreen: View {
                             .padding(.horizontal, 12)
                             .padding(.vertical, 8)
                         
-                        Divider()
-                            .padding(.horizontal, 16)
+                        
                     }
                     .background(Color.white)
                 }
@@ -213,6 +215,9 @@ struct HomeScreen: View {
         .navigationDestination(isPresented: $navigateToIPL) {
             IPLScreen(parentIsBarVisible: $isBarVisible)
         }
+        .navigationDestination(isPresented: $navigateToNotifications) {
+            NotificationsScreen()
+        }
         .task {
             await viewModel.loadHomeData()
         }
@@ -311,7 +316,7 @@ struct EventsSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            SectionHeader(title: "Events") {
+            SectionHeader(title: "Upcoming Events") {
                 // See all action
             }
             

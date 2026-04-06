@@ -32,16 +32,14 @@ struct EventsScreen: View {
                     VStack(spacing: 8) {
                         CommonTopBar(title: "Events")
                         
-                        Divider()
-                            .padding(.horizontal, 16)
+                       
                         
                         // Search Bar - Always Visible
                         AppSearchBar(text: $searchQuery, placeholder: "Search events...")
                             .padding(.horizontal, 12)
                             .padding(.vertical, 16)
                         
-                        Divider()
-                            .padding(.horizontal, 16)
+                        
                     }
                     .background(Color.white)
                     

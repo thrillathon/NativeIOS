@@ -6,6 +6,7 @@ struct ProfileScreen: View {
     @State private var showLogoutDialog = false
     @State private var isHelpExpanded = false
     @State private var isVersionExpanded = false
+    @State private var navigateToEditProfile = false
     
     var body: some View {
         NavigationStack {
@@ -13,7 +14,7 @@ struct ProfileScreen: View {
                 // Top Bar
                 ProfileTopBar(
                     userName: viewModel.userName,
-                    onEdit: { /* Navigate to edit profile */ }
+                    onEdit: { navigateToEditProfile = true }
                 )
                 
                 ScrollView {
@@ -102,6 +103,14 @@ struct ProfileScreen: View {
                     EmptyView()
                 }
             }
+            .navigationDestination(isPresented: $navigateToEditProfile) {
+                EditProfileScreen(
+                    name: viewModel.userName,
+                    email: viewModel.userEmail,
+                    phone: viewModel.userPhone,
+                    state: viewModel.userState
+                )
+            }
         }
     }
     
@@ -121,7 +130,7 @@ struct ProfileScreen: View {
                 }
                 
                 Button(action: onEdit) {
-                    HStack(spacing: 4) {
+                    HStack(spacing: 0) {
                         Text("Edit profile")
                             .font(.custom("Spectral", size: 14))
                         Text(">")
@@ -129,7 +138,7 @@ struct ProfileScreen: View {
                     }
                     .foregroundColor(.white)
                 }
-                .padding(.leading, 36)
+                
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)

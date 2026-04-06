@@ -46,6 +46,9 @@ struct MainContentView: View {
                 .animation(.easeInOut, value: networkMonitor.isConnected)
             }
         }
+        .onChange(of: tokenManager.isLoggedIn) { isLoggedIn in
+            startDestination = isLoggedIn ? "Home" : "OnBoarding"
+        }
         .task {
             let hasToken = await tokenManager.isLoggedIn()
             startDestination = hasToken ? "Home" : "OnBoarding"

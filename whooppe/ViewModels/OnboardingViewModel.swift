@@ -24,7 +24,8 @@ class OnboardingViewModel: ObservableObject {
                 let response = try await apiService.verifyPhone(phone: mobileNumber)
                 await MainActor.run {
                     isLoading = false
-                    navigationEvent = .navigateToOtp(phone: mobileNumber, phoneStatus: response.success)
+                    let isNewUser = response.data?.phoneStatus == "new"
+                    navigationEvent = .navigateToOtp(phone: mobileNumber, isNewUser: isNewUser)
                 }
             } catch {
                 await MainActor.run {
@@ -36,6 +37,6 @@ class OnboardingViewModel: ObservableObject {
     }
 }
 
-enum OnboardingNavigationEvent {
-    case navigateToOtp(phone: String, phoneStatus: Bool)
+enum OnboardingNavigationEvent: Equatable {
+    case navigateToOtp(phone: String, isNewUser: Bool)
 }

@@ -44,7 +44,6 @@ struct NotificationsScreen: View {
     var body: some View {
         VStack(spacing: 0) {
             // Top Bar
-            CommonTopBar(title: "Notifications", onBack: { dismiss() })
             
             Divider()
                 .frame(height: 1)

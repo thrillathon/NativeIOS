@@ -2,15 +2,23 @@ import SwiftUI
 
 struct EventsScreenSkeleton: View {
     var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: 16) {
-                ForEach(0..<2, id: \.self) { _ in
-                    LargeEventCardSkeleton()
+        VStack(alignment: .leading, spacing: 12) {
+            SkeletonBox(width: 130, height: 16, cornerRadius: 4)
+                .padding(.horizontal, 20)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 16) {
+                    ForEach(0..<2, id: \.self) { _ in
+                        LargeEventCardSkeleton()
+                    }
                 }
+                .padding(.horizontal, 20)
             }
-            .padding(.horizontal, 20)
+
+            Spacer()
         }
-        .padding(.top, 20)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+        .padding(.top, 16)
     }
 }
 

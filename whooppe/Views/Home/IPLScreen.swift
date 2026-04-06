@@ -74,8 +74,11 @@ struct IPLScreen: View {
                                     .font(.system(size: 20, weight: .semibold))
                                     .foregroundColor(.black)
                             }
-                        }
-                    }
+                        }}
+                        .navigationBarBackButtonHidden(true) // Add this to hide default back button
+
+
+                    
                     .onChange(of: scrollOffset) { newValue in
                         let delta = newValue - lastScrollOffset
                         

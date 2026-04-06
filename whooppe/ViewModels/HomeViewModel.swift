@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     @Published var adData: [AdData] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var userName = ""
     
     private let apiService = APIService.shared
     
@@ -22,6 +23,16 @@ class HomeViewModel: ObservableObject {
         
         print("📥 Loading Home Data...")
         
+        // Load user profile for greeting
+        do {
+            let profile = try await apiService.getUserProfileData()
+            await MainActor.run {
+                self.userName = profile.user?.name ?? ""
+            }
+        } catch {
+            print("⚠️ Failed to load user profile: \(error.localizedDescription)")
+        }
+
         // Load events
         do {
             let events = try await apiService.getEvents()
@@ -262,7 +273,11 @@ class HomeViewModel: ObservableObject {
                 coverImage: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=500",
                 description: "A community for tech enthusiasts and innovators",
                 memberCount: 1234,
-                eventIds: ["1", "3"]
+                eventIds: ["1", "3"],
+                facebookLink: "https://facebook.com/techinnovators",
+                instagramLink: "https://instagram.com/techinnovators",
+                telegramLink: "https://t.me/techinnovators",
+                whatsappLink: "https://wa.me/919876543210"
             ),
             Community(
                 id: "comm2",
@@ -272,7 +287,9 @@ class HomeViewModel: ObservableObject {
                 coverImage: "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=500",
                 description: "Bringing artists together",
                 memberCount: 856,
-                eventIds: ["2"]
+                eventIds: ["2"],
+                instagramLink: "https://instagram.com/artcollective",
+                whatsappLink: "https://wa.me/919876543211"
             ),
             Community(
                 id: "comm3",
@@ -282,7 +299,10 @@ class HomeViewModel: ObservableObject {
                 coverImage: "https://images.unsplash.com/photo-1517836357463-d25ddfcbf042?w=500",
                 description: "Stay fit, stay healthy",
                 memberCount: 2100,
-                eventIds: ["4", "5"]
+                eventIds: ["4", "5"],
+                facebookLink: "https://facebook.com/fitnesswarriors",
+                telegramLink: "https://t.me/fitnesswarriors",
+                whatsappLink: "https://wa.me/919876543212"
             ),
             Community(
                 id: "comm4",
@@ -292,17 +312,22 @@ class HomeViewModel: ObservableObject {
                 coverImage: "https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=500",
                 description: "Create and share music",
                 memberCount: 945,
-                eventIds: ["6"]
+                eventIds: ["6"],
+                facebookLink: "https://facebook.com/musicmakers",
+                instagramLink: "https://instagram.com/musicmakers",
+                telegramLink: "https://t.me/musicmakers"
             ),
             Community(
                 id: "comm5",
                 name: "Book Club",
                 ownerName: "James Wilson",
                 ownerId: "user6",
-                coverImage: "https://images.unsplash.com/photo-150784272343-583f20270319?w=500",
+                coverImage: "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=500",
                 description: "Reading and discussing books",
                 memberCount: 567,
-                eventIds: ["7"]
+                eventIds: ["7"],
+                telegramLink: "https://t.me/bookclub",
+                whatsappLink: "https://wa.me/919876543213"
             ),
             Community(
                 id: "comm6",
@@ -312,7 +337,10 @@ class HomeViewModel: ObservableObject {
                 coverImage: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=500",
                 description: "Exploring culinary delights",
                 memberCount: 1876,
-                eventIds: ["8"]
+                eventIds: ["8"],
+                facebookLink: "https://facebook.com/foodlovers",
+                instagramLink: "https://instagram.com/foodlovers",
+                whatsappLink: "https://wa.me/919876543214"
             )
         ]
     }

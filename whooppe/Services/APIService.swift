@@ -210,6 +210,7 @@ class APIService {
         return try await makeRequest(endpoint: "auth/verify-otp-new", method: "POST", body: body)
     }
     
+    @discardableResult
     func completeProfile(name: String, email: String, state: String) async throws -> CompleteProfileResponse {
         let body = try JSONEncoder().encode(CompleteProfileRequest(name: name, email: email, state: state))
         return try await makeRequest(endpoint: "auth/complete-profile", method: "POST", body: body)
@@ -382,7 +383,7 @@ func verifyAadhaar(aadhaarNumber: String, consentGiven: Bool) async throws -> Aa
 }
 
 // MARK: - APIError Enum
-enum APIError: Error {
+enum APIError: LocalizedError {
     case invalidURL
     case invalidResponse
     case unauthorized
@@ -391,6 +392,19 @@ enum APIError: Error {
     case httpError(Int)
     case emptyResponse
     case userNotFound
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidURL:        return "Invalid request URL."
+        case .invalidResponse:   return "Invalid server response."
+        case .unauthorized:      return "Session expired. Please log in again."
+        case .uploadFailed:      return "File upload failed. Please try again."
+        case .invalidImageData:  return "Could not process the selected image."
+        case .httpError(let code): return "Server error (\(code)). Please try again."
+        case .emptyResponse:     return "No data received from server."
+        case .userNotFound:      return "User not found. Please log in again."
+        }
+    }
 }
 
 // MARK: - Response Models for Aadhaar

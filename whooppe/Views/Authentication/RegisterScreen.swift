@@ -3,13 +3,20 @@ import Combine
 
 struct RegisterScreen: View {
     let phone: String
+    let isNewUser: Bool
     @StateObject private var viewModel = RegisterViewModel()
-    @Environment(\.dismiss) var dismiss
+    @Environment(\..dismiss) var dismiss
     @FocusState private var focusedField: Int?
     @State private var otpDigits = ["", "", "", ""]
     @State private var resendTimer = 25
     @State private var canResend = false
-    @State private var navigateToAadhaar = false
+    @State private var navigateToHome = false
+    @State private var navigateToUserInfo = false
+
+    init(phone: String, isNewUser: Bool = false) {
+        self.phone = phone
+        self.isNewUser = isNewUser
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -21,23 +28,12 @@ struct RegisterScreen: View {
                         .foregroundColor(.black)
                 }
                 
-                Spacer()
                 
-                Text("OTP Authenticity")
-                    .font(.custom("Spectral", size: 16))
-                
-                Spacer()
-                
-                Color.clear.frame(width: 48)
             }
             .padding(.horizontal, 16)
             .padding(.top, 22)
             
-            Divider()
-                .padding(.horizontal, 30)
-                .padding(.vertical, 8)
             
-            Spacer().frame(height: 40)
             
             VStack(spacing: 50) {
                 // OTP Message
@@ -78,9 +74,9 @@ struct RegisterScreen: View {
                 HStack(spacing: 4) {
                     Text("It looks like the OTP hasn't come\nto your ")
                         .font(.system(size: 12))
-                    Image("ic_whatsapp")
-                        .resizable()
-                        .frame(width: 14, height: 14)
+                    Image(systemName: "message.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(Color(hex: "#25D366"))
                     Text("WhatsApp")
                         .font(.system(size: 12))
                         .fontWeight(.semibold)
@@ -108,13 +104,36 @@ struct RegisterScreen: View {
             Spacer()
         }
         .background(Color.white)
-        .navigationDestination(isPresented: $navigateToAadhaar) {
-            AadhaarVerificationScreen()
+        .navigationTitle("OTP Authentication")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(Color(hex: "#D4B547"), for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+               // Remove the default back button
+               ToolbarItem(placement: .navigationBarLeading) {
+                   Button(action: { dismiss() }) {
+                       Image(systemName: "chevron.left")
+                           .font(.system(size: 20, weight: .semibold))
+                           .foregroundColor(.black)
+                   }
+               }
+           }
+           .navigationBarBackButtonHidden(true) // Add this to hide default back button
+        .navigationDestination(isPresented: $navigateToHome) {
+            HomeScreen()
+        }
+        .navigationDestination(isPresented: $navigateToUserInfo) {
+            UserInfoScreen(phone: phone)
         }
         .onChange(of: viewModel.otpVerified) { newValue in
             if newValue {
-                print("🎯 OTP verified, navigating to Aadhaar verification...")
-                navigateToAadhaar = true
+                print("🎯 OTP verified, isNewUser=\(isNewUser)")
+                if isNewUser {
+                    navigateToUserInfo = true
+                } else {
+                    navigateToHome = true
+                }
             }
         }
         .onChange(of: otpDigits) { newValue in

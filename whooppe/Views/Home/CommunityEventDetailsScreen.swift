@@ -47,6 +47,35 @@ struct CommunityEventDetailsScreen: View {
                         .font(.system(size: 11))
                         .foregroundColor(Color(hex: "#D4B547"))
                         .padding(.top, 4)
+
+                        // Social links — only shown when link exists
+                        let socialLinks: [(url: String?, icon: String, color: Color)] = [
+                            (community.facebookLink,  "f.circle.fill",       Color(hex: "#1877F2")),
+                            (community.instagramLink, "camera.circle.fill",  Color(hex: "#E1306C")),
+                            (community.telegramLink,  "paperplane.circle.fill", Color(hex: "#2AABEE")),
+                            (community.whatsappLink,  "message.circle.fill", Color(hex: "#25D366")),
+                        ]
+                        let activeSocial = socialLinks.filter { $0.url?.isEmpty == false }
+                        if !activeSocial.isEmpty {
+                            VStack(spacing: 8) {
+                                Text("Tap a link below to join the community")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.gray)
+
+                                HStack(spacing: 20) {
+                                    ForEach(Array(activeSocial.enumerated()), id: \.offset) { _, item in
+                                        if let urlString = item.url, let url = URL(string: urlString) {
+                                            Link(destination: url) {
+                                                Image(systemName: item.icon)
+                                                    .font(.system(size: 28))
+                                                    .foregroundColor(item.color)
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            .padding(.top, 6)
+                        }
                     }
                     .padding(.vertical, 10)
                     .padding(.horizontal, 8)

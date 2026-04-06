@@ -167,7 +167,7 @@ struct CommunityCard: View {
                     Text(community.description)
                         .font(.system(size: 12))
                         .foregroundColor(.gray)
-                        .lineLimit(2)
+                        .lineLimit(1)
                         .multilineTextAlignment(.leading)
                 }
                 .padding(12)
