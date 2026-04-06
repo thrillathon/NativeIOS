@@ -1,7 +1,4 @@
 import SwiftUI
-// #if canImport(FirebaseCore)
-// import FirebaseCore
-// #endif
 
 @main
 struct WhooppeApp: App {
@@ -11,9 +8,6 @@ struct WhooppeApp: App {
     @StateObject private var networkMonitor = NetworkMonitor.shared
     
     init() {
-        // #if canImport(FirebaseCore)
-        // FirebaseApp.configure()
-        // #endif
         setupImageLoader()
     }
     

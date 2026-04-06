@@ -253,13 +253,12 @@ class APIService {
     
     // MARK: - Community APIs
     func getCommunities() async throws -> [Community] {
-        // Decode using the wrapper structure from backend
         struct CommunitiesResponse: Codable {
             let status: String
             let data: [Community]
         }
         
-        let response: CommunitiesResponse = try await makeRequest(endpoint: "communities")
+        let response: CommunitiesResponse = try await makeRequest(endpoint: "organizers?community=all")
         return response.data
     }
     

@@ -9,10 +9,19 @@
 /* Begin PBXBuildFile section */
 		2E10569C2F812F5800760C76 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 2E10569B2F812F5800760C76 /* Kingfisher */; };
 		2E1056A22F81301100760C76 /* RazorpayCheckout in Frameworks */ = {isa = PBXBuildFile; productRef = 2E1056A12F81301100760C76 /* RazorpayCheckout */; };
+		2E6F389F2F83F6770068F1FC /* FirebaseAI in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6F389E2F83F6770068F1FC /* FirebaseAI */; };
+		2E6F38A12F83F6770068F1FC /* FirebaseAILogic in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6F38A02F83F6770068F1FC /* FirebaseAILogic */; };
+		2E6F38A32F83F6770068F1FC /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6F38A22F83F6770068F1FC /* FirebaseAnalytics */; };
+		2E6F38A52F83F6770068F1FC /* FirebaseAnalyticsCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6F38A42F83F6770068F1FC /* FirebaseAnalyticsCore */; };
+		2E6F38A72F83F6770068F1FC /* FirebaseAnalyticsIdentitySupport in Frameworks */ = {isa = PBXBuildFile; productRef = 2E6F38A62F83F6770068F1FC /* FirebaseAnalyticsIdentitySupport */; };
+		C866CAD33995B0991759E37B /* Pods_whooppe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0830A7C242ED1C3B43412B6B /* Pods_whooppe.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0830A7C242ED1C3B43412B6B /* Pods_whooppe.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_whooppe.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E1055F22F811F9300760C76 /* whooppe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = whooppe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		491D1051616072E79C340BF7 /* Pods-whooppe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-whooppe.debug.xcconfig"; path = "Target Support Files/Pods-whooppe/Pods-whooppe.debug.xcconfig"; sourceTree = "<group>"; };
+		A6F3225F89394B601F7942DD /* Pods-whooppe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-whooppe.release.xcconfig"; path = "Target Support Files/Pods-whooppe/Pods-whooppe.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -28,19 +37,35 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2E6F38A72F83F6770068F1FC /* FirebaseAnalyticsIdentitySupport in Frameworks */,
 				2E1056A22F81301100760C76 /* RazorpayCheckout in Frameworks */,
+				2E6F389F2F83F6770068F1FC /* FirebaseAI in Frameworks */,
+				2E6F38A32F83F6770068F1FC /* FirebaseAnalytics in Frameworks */,
 				2E10569C2F812F5800760C76 /* Kingfisher in Frameworks */,
+				C866CAD33995B0991759E37B /* Pods_whooppe.framework in Frameworks */,
+				2E6F38A52F83F6770068F1FC /* FirebaseAnalyticsCore in Frameworks */,
+				2E6F38A12F83F6770068F1FC /* FirebaseAILogic in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0CE2F38605CB06E09A1EA697 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0830A7C242ED1C3B43412B6B /* Pods_whooppe.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		2E1055E92F811F9300760C76 = {
 			isa = PBXGroup;
 			children = (
 				2E1055F42F811F9300760C76 /* whooppe */,
 				2E1055F32F811F9300760C76 /* Products */,
+				51228C81F399DA4B732DC387 /* Pods */,
+				0CE2F38605CB06E09A1EA697 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -52,6 +77,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		51228C81F399DA4B732DC387 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				491D1051616072E79C340BF7 /* Pods-whooppe.debug.xcconfig */,
+				A6F3225F89394B601F7942DD /* Pods-whooppe.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -59,9 +93,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2E1055FD2F811F9600760C76 /* Build configuration list for PBXNativeTarget "whooppe" */;
 			buildPhases = (
+				C8E481941D1AD505CA5C8268 /* [CP] Check Pods Manifest.lock */,
 				2E1055EE2F811F9300760C76 /* Sources */,
 				2E1055EF2F811F9300760C76 /* Frameworks */,
 				2E1055F02F811F9300760C76 /* Resources */,
+				89E6DAE6DD35DE4168D23B28 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -74,6 +110,11 @@
 			packageProductDependencies = (
 				2E10569B2F812F5800760C76 /* Kingfisher */,
 				2E1056A12F81301100760C76 /* RazorpayCheckout */,
+				2E6F389E2F83F6770068F1FC /* FirebaseAI */,
+				2E6F38A02F83F6770068F1FC /* FirebaseAILogic */,
+				2E6F38A22F83F6770068F1FC /* FirebaseAnalytics */,
+				2E6F38A42F83F6770068F1FC /* FirebaseAnalyticsCore */,
+				2E6F38A62F83F6770068F1FC /* FirebaseAnalyticsIdentitySupport */,
 			);
 			productName = whooppe;
 			productReference = 2E1055F22F811F9300760C76 /* whooppe.app */;
@@ -106,6 +147,7 @@
 			packageReferences = (
 				2E10569A2F812F5800760C76 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				2E1056A02F81301100760C76 /* XCRemoteSwiftPackageReference "razorpay-pod" */,
+				2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 2E1055F32F811F9300760C76 /* Products */;
@@ -126,6 +168,52 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		89E6DAE6DD35DE4168D23B28 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-whooppe/Pods-whooppe-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-whooppe/Pods-whooppe-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-whooppe/Pods-whooppe-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C8E481941D1AD505CA5C8268 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-whooppe-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		2E1055EE2F811F9300760C76 /* Sources */ = {
@@ -261,6 +349,7 @@
 		};
 		2E1055FE2F811F9600760C76 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 491D1051616072E79C340BF7 /* Pods-whooppe.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -273,8 +362,10 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -299,6 +390,7 @@
 		};
 		2E1055FF2F811F9600760C76 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = A6F3225F89394B601F7942DD /* Pods-whooppe.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -311,8 +403,10 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleLightContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -375,6 +469,14 @@
 				minimumVersion = 1.2.6;
 			};
 		};
+		2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.11.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -387,6 +489,31 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 2E1056A02F81301100760C76 /* XCRemoteSwiftPackageReference "razorpay-pod" */;
 			productName = RazorpayCheckout;
+		};
+		2E6F389E2F83F6770068F1FC /* FirebaseAI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAI;
+		};
+		2E6F38A02F83F6770068F1FC /* FirebaseAILogic */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAILogic;
+		};
+		2E6F38A22F83F6770068F1FC /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		2E6F38A42F83F6770068F1FC /* FirebaseAnalyticsCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsCore;
+		};
+		2E6F38A62F83F6770068F1FC /* FirebaseAnalyticsIdentitySupport */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 2E6F389D2F83F6770068F1FC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsIdentitySupport;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

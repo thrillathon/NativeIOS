@@ -25,8 +25,7 @@ class TokenManager: ObservableObject {
     }
     
     func logStorageStatus() {
-        let storedUserId = userDefaults.string(forKey: userIdKey)
-      
+        _ = userDefaults.string(forKey: userIdKey)
     }
     
     func getAccessTokenSync() -> String? {

@@ -5,100 +5,177 @@ struct ContactRangmunchScreen: View {
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel = ContactRangmunchViewModel()
     @State private var showToast = false
-    
+
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                
-                
+
                 // Form Content
                 ScrollView {
-                    VStack(spacing: 0) {
-                        Spacer()
-                            .frame(height: 35)
-                        
-                        VStack(spacing: 20) {
+                    VStack(spacing: 20) {
+                        Spacer().frame(height: 20)
+
+                        Group {
                             InputField(
-                                label: "Organisation name",
-                                placeholder: "Enter the organisation name",
-                                value: $viewModel.organisationName,
-                                isError: viewModel.organisationNameError != nil,
-                                errorText: viewModel.organisationNameError
+                                label: "Full Name",
+                                placeholder: "Enter your full name",
+                                value: $viewModel.fullName,
+                                isError: viewModel.fullNameError != nil,
+                                errorText: viewModel.fullNameError
                             )
-                            
-                            // Organisation email
+
                             InputField(
-                                label: "Organisation email",
-                                placeholder: "Enter the email",
-                                value: $viewModel.organisationEmail,
+                                label: "Email",
+                                placeholder: "Enter your email",
+                                value: $viewModel.email,
                                 keyboardType: .emailAddress,
-                                isError: viewModel.organisationEmailError != nil,
-                                errorText: viewModel.organisationEmailError
+                                isError: viewModel.emailError != nil,
+                                errorText: viewModel.emailError
                             )
-                            
-                            // Contact name
+
                             InputField(
-                                label: "Contact name",
-                                placeholder: "Enter the name",
-                                value: $viewModel.contactName,
-                                isError: viewModel.contactNameError != nil,
-                                errorText: viewModel.contactNameError
-                            )
-                            
-                            // Contact number
-                            InputField(
-                                label: "Enter contact number",
-                                placeholder: "Enter the contact person number",
-                                value: $viewModel.contactNumber,
+                                label: "Phone Number",
+                                placeholder: "Enter 10-digit mobile number",
+                                value: $viewModel.phone,
                                 keyboardType: .phonePad,
-                                isError: viewModel.contactNumberError != nil,
-                                errorText: viewModel.contactNumberError
+                                isError: viewModel.phoneError != nil,
+                                errorText: viewModel.phoneError
                             )
-                            
-                            // General error message
-                            if let errorMessage = viewModel.errorMessage {
-                                Text(errorMessage)
-                                    .font(.system(size: 13, weight: .regular))
+
+                            InputField(
+                                label: "Organisation Name",
+                                placeholder: "Enter your organisation name",
+                                value: $viewModel.organizationName,
+                                isError: viewModel.organizationNameError != nil,
+                                errorText: viewModel.organizationNameError
+                            )
+
+                            InputField(
+                                label: "City",
+                                placeholder: "Enter your city",
+                                value: $viewModel.city,
+                                isError: viewModel.cityError != nil,
+                                errorText: viewModel.cityError
+                            )
+                        }
+
+                        Group {
+                            DropdownField(
+                                label: "State",
+                                placeholder: "Select state",
+                                options: ContactRangmunchViewModel.indianStates,
+                                selection: $viewModel.state,
+                                isError: viewModel.stateError != nil,
+                                errorText: viewModel.stateError
+                            )
+
+                            DropdownField(
+                                label: "Partnership Type",
+                                placeholder: "Select type",
+                                options: ContactRangmunchViewModel.partnershipTypes.map(\.display),
+                                selection: Binding(
+                                    get: { viewModel.partnershipTypeDisplay },
+                                    set: { viewModel.partnershipTypeDisplay = $0 }
+                                ),
+                                isError: viewModel.partnershipTypeError != nil,
+                                errorText: viewModel.partnershipTypeError
+                            )
+
+                            DropdownField(
+                                label: "Event Type",
+                                placeholder: "Select event type",
+                                options: ContactRangmunchViewModel.eventTypes.map(\.display),
+                                selection: Binding(
+                                    get: { viewModel.eventTypeDisplay },
+                                    set: { viewModel.eventTypeDisplay = $0 }
+                                ),
+                                isError: viewModel.eventTypeError != nil,
+                                errorText: viewModel.eventTypeError
+                            )
+
+                            DropdownField(
+                                label: "Experience Level",
+                                placeholder: "Select experience level",
+                                options: ContactRangmunchViewModel.experienceLevels.map(\.display),
+                                selection: Binding(
+                                    get: { viewModel.experienceLevelDisplay },
+                                    set: { viewModel.experienceLevelDisplay = $0 }
+                                ),
+                                isError: viewModel.experienceLevelError != nil,
+                                errorText: viewModel.experienceLevelError
+                            )
+                        }
+
+                        // Message text area
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text("Message")
+                                    .font(.system(size: 14, weight: .regular))
+                                    .foregroundColor(.black)
+                                Spacer()
+                                Text("\(viewModel.message.count)/2000")
+                                    .font(.system(size: 11))
+                                    .foregroundColor(.gray)
+                            }
+
+                            ZStack(alignment: .topLeading) {
+                                if viewModel.message.isEmpty {
+                                    Text("Describe your proposal (min. 20 characters)...")
+                                        .font(.system(size: 13))
+                                        .foregroundColor(Color.gray.opacity(0.5))
+                                        .padding(.horizontal, 11)
+                                        .padding(.top, 10)
+                                }
+                                TextEditor(text: $viewModel.message)
+                                    .font(.system(size: 13))
+                                    .scrollContentBackground(.hidden)
+                                    .padding(.horizontal, 7)
+                                    .padding(.vertical, 6)
+                                    .onChange(of: viewModel.message) { newVal in
+                                        if newVal.count > 2000 {
+                                            viewModel.message = String(newVal.prefix(2000))
+                                        }
+                                    }
+                            }
+                            .frame(minHeight: 110)
+                            .background(Color(hex: "#F5F1E8"))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(viewModel.messageError != nil ? Color.red : Color(hex: "#D4B547"), lineWidth: 1)
+                            )
+
+                            if let err = viewModel.messageError {
+                                Text(err)
+                                    .font(.system(size: 11))
                                     .foregroundColor(.red)
-                                    .padding(.leading, 10)
+                                    .padding(.leading, 4)
                             }
                         }
-                        .padding(.horizontal, 32)
-                        
-                        Spacer()
+
+                        if let errorMessage = viewModel.errorMessage {
+                            Text(errorMessage)
+                                .font(.system(size: 13))
+                                .foregroundColor(.red)
+                                .padding(.leading, 10)
+                        }
+
+                        Spacer().frame(height: 20)
                     }
-                     .navigationTitle("Contact Whooppe  ")
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbarBackground(Color(hex: "#D4B547"), for: .navigationBar)
-                    .toolbarBackground(.visible, for: .navigationBar)
-                    .toolbarColorScheme(.dark, for: .navigationBar)
-                    .toolbar {
-                        // Remove the default back button
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(action: { dismiss() }) {
-                                Image(systemName: "chevron.left")
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundColor(.black)                    }
+                    .padding(.horizontal, 24)
                 }
-            }
-            .navigationBarBackButtonHidden(true) // Add this to hide default back button
-                }
-                
-                Spacer()
-                
-                // Send Button at bottom with yellow background
+
+                // Send Button
                 VStack(spacing: 0) {
                     Button(action: {
                         if !viewModel.isLoading {
-                            viewModel.sendContactForm()
+                            Task { await viewModel.submitInquiry() }
                         }
                     }) {
                         HStack {
                             if viewModel.isLoading {
-                                ProgressView()
-                                    .tint(.white)
+                                ProgressView().tint(.white)
                             } else {
-                                Text("Send")
+                                Text("Send Inquiry")
                                     .font(.system(size: 16, weight: .regular))
                                     .foregroundColor(.white)
                             }
@@ -112,44 +189,51 @@ struct ContactRangmunchScreen: View {
                     .padding(.horizontal, 22)
                     .padding(.vertical, 12)
                     .disabled(viewModel.isLoading)
-                    
-                    // Yellow background fills to bottom (simulating nav bar)
-                    VStack {
-                        Spacer()
-                    }
-                    .frame(height: 20)
-                    .background(Color(hex: "#F5F1E8"))
+
+                    Spacer().frame(height: 20)
                 }
                 .background(Color(hex: "#F5F1E8"))
             }
             .background(Color.white)
-            
-            // Toast notification
+            .navigationTitle("Contact Whooppe")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(Color(hex: "#D4B547"), for: .navigationBar)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { dismiss() }) {
+                        Image(systemName: "chevron.left")
+                            .font(.system(size: 20, weight: .semibold))
+                            .foregroundColor(.black)
+                    }
+                }
+            }
+
+            // Toast
             VStack {
                 Spacer()
-                
                 if showToast {
-                    VStack {
-                        Text("Rangmunch team will reach out you within 24 hours.")
-                            .font(.system(size: 11, weight: .light))
-                            .foregroundColor(Color(hex: "#FFD700"))
-                            .multilineTextAlignment(.center)
-                    }
-                    .frame(height: 35)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(hex: "#FFFCF5"))
-                    .cornerRadius(10)
-                    .padding(.horizontal, 16)
-                    .padding(.bottom, 120)
-                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    Text("Your inquiry has been submitted. We'll reach out within 24 hours.")
+                        .font(.system(size: 11, weight: .light))
+                        .foregroundColor(Color(hex: "#FFD700"))
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 45)
+                        .background(Color(hex: "#FFFCF5"))
+                        .cornerRadius(10)
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 120)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
                 }
             }
         }
         .onChange(of: viewModel.successMessage) { newValue in
             if newValue != nil {
-                showToast = true
+                withAnimation { showToast = true }
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    showToast = false
+                    withAnimation { showToast = false }
                     viewModel.clearMessages()
                     viewModel.resetForm()
                     dismiss()
@@ -159,6 +243,55 @@ struct ContactRangmunchScreen: View {
     }
 }
 
+// MARK: - Dropdown Field
+struct DropdownField: View {
+    let label: String
+    let placeholder: String
+    let options: [String]
+    @Binding var selection: String
+    let isError: Bool
+    let errorText: String?
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text(label)
+                .font(.system(size: 14, weight: .regular))
+                .foregroundColor(.black)
+
+            Menu {
+                ForEach(options, id: \.self) { option in
+                    Button(option) { selection = option }
+                }
+            } label: {
+                HStack {
+                    Text(selection.isEmpty ? placeholder : selection)
+                        .font(.system(size: 13))
+                        .foregroundColor(selection.isEmpty ? Color.gray.opacity(0.5) : .black)
+                    Spacer()
+                    Image(systemName: "chevron.down")
+                        .font(.system(size: 12))
+                        .foregroundColor(.gray)
+                }
+                .padding(.horizontal, 11)
+                .frame(height: 35)
+                .background(Color(hex: "#F5F1E8"))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10)
+                        .stroke(isError ? Color.red : Color(hex: "#D4B547"), lineWidth: 1)
+                )
+            }
+
+            if isError, let errorText = errorText {
+                Text(errorText)
+                    .font(.system(size: 11))
+                    .foregroundColor(.red)
+                    .padding(.leading, 4)
+            }
+        }
+    }
+}
+
+// MARK: - Input Field
 struct InputField: View {
     let label: String
     let placeholder: String
@@ -166,164 +299,45 @@ struct InputField: View {
     var keyboardType: UIKeyboardType = .default
     let isError: Bool
     let errorText: String?
-    
+
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
-            // Label
             Text(label)
                 .font(.system(size: 14, weight: .regular))
                 .foregroundColor(.black)
-            
-            // Input box
+
             HStack(spacing: 0) {
                 TextField("", text: $value)
                     .placeholder(when: value.isEmpty) {
-                        Text(placeholder)
-                            .foregroundColor(Color.gray.opacity(0.5))
+                        Text(placeholder).foregroundColor(Color.gray.opacity(0.5))
                     }
-                    .font(.system(size: 13, weight: .regular))
+                    .font(.system(size: 13))
                     .keyboardType(keyboardType)
                     .padding(.horizontal, 11)
             }
             .frame(height: 35)
             .background(Color(hex: "#F5F1E8"))
-            .border(
-                isError ? Color.red : Color(hex: "#D4B547"),
-                width: 1
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(isError ? Color.red : Color(hex: "#D4B547"), lineWidth: 1)
             )
-            .cornerRadius(10)
-            
-            // Error text
+
             if isError, let errorText = errorText {
                 Text(errorText)
-                    .font(.system(size: 11, weight: .regular))
+                    .font(.system(size: 11))
                     .foregroundColor(.red)
                     .padding(.leading, 4)
-                    .padding(.top, 4)
             }
         }
     }
 }
 
-// MARK: - ViewModel
-class ContactRangmunchViewModel: ObservableObject {
-    @Published var organisationName = ""
-    @Published var organisationEmail = ""
-    @Published var contactName = ""
-    @Published var contactNumber = ""
-    
-    @Published var organisationNameError: String?
-    @Published var organisationEmailError: String?
-    @Published var contactNameError: String?
-    @Published var contactNumberError: String?
-    
-    @Published var errorMessage: String?
-    @Published var successMessage: String?
-    @Published var isLoading = false
-    
-    init() {}
-    
-    func onOrganisationNameChange(_ value: String) {
-        organisationName = value
-        organisationNameError = nil
-    }
-    
-    func onOrganisationEmailChange(_ value: String) {
-        organisationEmail = value
-        organisationEmailError = nil
-    }
-    
-    func onContactNameChange(_ value: String) {
-        contactName = value
-        contactNameError = nil
-    }
-    
-    func onContactNumberChange(_ value: String) {
-        contactNumber = value
-        contactNumberError = nil
-    }
-    
-    func sendContactForm() {
-        // Validate form
-        var hasError = false
-        
-        if organisationName.trimmingCharacters(in: .whitespaces).isEmpty {
-            organisationNameError = "Organisation name is required"
-            hasError = true
-        }
-        
-        if organisationEmail.trimmingCharacters(in: .whitespaces).isEmpty {
-            organisationEmailError = "Organisation email is required"
-            hasError = true
-        } else if !isValidEmail(organisationEmail) {
-            organisationEmailError = "Please enter a valid email"
-            hasError = true
-        }
-        
-        if contactName.trimmingCharacters(in: .whitespaces).isEmpty {
-            contactNameError = "Contact name is required"
-            hasError = true
-        }
-        
-        if contactNumber.trimmingCharacters(in: .whitespaces).isEmpty {
-            contactNumberError = "Contact number is required"
-            hasError = true
-        } else if !isValidPhoneNumber(contactNumber) {
-            contactNumberError = "Please enter a valid contact number"
-            hasError = true
-        }
-        
-        if hasError {
-            return
-        }
-        
-        // Submit form
-        isLoading = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            self.isLoading = false
-            self.successMessage = "Form submitted successfully"
-        }
-    }
-    
-    func clearMessages() {
-        errorMessage = nil
-        successMessage = nil
-    }
-    
-    func resetForm() {
-        organisationName = ""
-        organisationEmail = ""
-        contactName = ""
-        contactNumber = ""
-        organisationNameError = nil
-        organisationEmailError = nil
-        contactNameError = nil
-        contactNumberError = nil
-    }
-    
-    private func isValidEmail(_ email: String) -> Bool {
-        let emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-        let emailPredicate = NSPredicate(format: "SELF MATCHES %@", emailRegex)
-        return emailPredicate.evaluate(with: email)
-    }
-    
-    private func isValidPhoneNumber(_ phone: String) -> Bool {
-        let phoneRegex = "^[0-9]{10,}$"
-        let phonePredicate = NSPredicate(format: "SELF MATCHES %@", phoneRegex)
-        return phonePredicate.evaluate(with: phone.replacingOccurrences(of: "[^0-9]", with: "", options: .regularExpression))
-    }
-}
 
-// Helper extensions
-extension View {
-    func placeholder<Content: View>(when shouldShow: Bool, alignment: Alignment = .leading, @ViewBuilder placeholder: () -> Content) -> some View {
-        ZStack(alignment: alignment) {
-            placeholder().opacity(shouldShow ? 1 : 0)
-            self
-        }
-    }
-}
+// MARK: - Placeholder helper
 
 #Preview {
-    ContactRangmunchScreen()
+    NavigationStack {
+        ContactRangmunchScreen()
+    }
 }
+

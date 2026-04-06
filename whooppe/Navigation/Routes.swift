@@ -47,15 +47,13 @@ extension View {
         item: Binding<D?>,
         @ViewBuilder destination: @escaping (D) -> Content
     ) -> some View {
-        self.background(
-            NavigationLink(
-                destination: item.wrappedValue.map { destination($0) },
-                isActive: Binding(
-                    get: { item.wrappedValue != nil },
-                    set: { if !$0 { item.wrappedValue = nil } }
-                ),
-                label: { EmptyView() }
-            )
-        )
+        self.navigationDestination(isPresented: Binding(
+            get: { item.wrappedValue != nil },
+            set: { if !$0 { item.wrappedValue = nil } }
+        )) {
+            if let value = item.wrappedValue {
+                destination(value)
+            }
+        }
     }
 }

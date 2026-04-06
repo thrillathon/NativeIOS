@@ -116,7 +116,8 @@ struct ButtonScreenContent: View {
     
     var body: some View {
         VStack(spacing: 0) {
-        
+            CommonTopBar(title: "Whooppe Authentication Pass" )
+            
             ScrollView {
                 VStack(spacing: 24) {
                     PassCardView(viewModel: viewModel)
@@ -141,21 +142,6 @@ struct ButtonScreenContent: View {
         }
         .background(Color.white)
         .ignoresSafeArea(edges: .bottom)
-        .navigationTitle("Whooppe Authentication")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(Color(hex: "#D4B547"), for: .navigationBar)
-            .toolbarBackground(.visible, for: .navigationBar)
-            .toolbarColorScheme(.dark, for: .navigationBar)
-            .toolbar {
-                // Remove the default back button
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { dismiss() }) {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 20, weight: .semibold))
-                            .foregroundColor(.black)
-                    }
-                }
-            }
     }
 }
 
